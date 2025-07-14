@@ -1,0 +1,10 @@
+{
+    "YogendraCafe": [
+        { "name": "Support Tickets", "path": "/support" },
+        { "name": "Order Management", "path": "/orders" },
+        { "name": "Tracking", "path": "/tracking" }
+    ],
+    "HopeIntern": [
+        { "name": "Development", "path": "/support" }
+    ]
+}
