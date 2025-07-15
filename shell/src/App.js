@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Sidebar from './components/Sidebar';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const RemoteSupport = lazy(() => import('supportApp/Support'));
+
+const App = () => {
+    return (
+        <BrowserRouter>
+            <div style={{ display: 'flex' }}>
+                <Sidebar />
+                <div style={{ flex: 1, padding: '1rem' }}>
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <Routes>
+                            <Route path="/" element={<h1>🏠 Home</h1>} />
+                            <Route path="/support-tickets" element={<RemoteSupport />} />
+                        </Routes>
+                    </Suspense>
+                </div>
+            </div>
+        </BrowserRouter>
+    );
+};
 
 export default App;
