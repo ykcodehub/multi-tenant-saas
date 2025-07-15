@@ -15,7 +15,7 @@
             userId: decoded.userId,
             customerId: decoded.customerId,
             role: decoded.role
-        }
+        };
         next();
     } catch (err) {
         console.error(err);

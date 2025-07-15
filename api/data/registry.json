@@ -5,6 +5,9 @@
         { "name": "Tracking", "path": "/tracking" }
     ],
     "HopeIntern": [
-        { "name": "Development", "path": "/support" }
+        { "name": "Java Development", "path": "/support" },
+        { "name": "Software Maintenance", "path": "/support" },
+        { "name": "Full stack Developer", "path": "/orders" },
+        { "name": "Software Devloper Engineer", "path": "/tracking" }
     ]
 }
