@@ -1,11 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const userController = require('../controllers/userController');
 
-const { getUsers } = require("../controllers/userController");
-const { verifyToken } = require("../middleware/authMiddleware");
-const { restictTo, restrictTo } = require("../middleware/roleMiddleware");
 
-router.get('/', verifyToken, restrictTo("Admin"), getUsers);
-
+router.get('/', userController.getAllUsers);
 
 module.exports = router;

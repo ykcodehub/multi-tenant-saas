@@ -1,16 +1,18 @@
 const express = require('express');
-const axios = require('axios');
 const router = express.Router();
+const { verifyToken } = require('../middleware/authMiddleware');
+const {
+  getAllTickets,
+  getTicketById,
+  createTicket,
+  updateTicket,
+  deleteTicket
+} = require('../controllers/ticketController');
 
-router.post('/tickets', async (req, res) => {
-    const { customerId, ticketId } = req.body;
-    try {
-        await axios.post('http://n8n:5678/webhook/test', { customerId, ticketId });
-        res.json({ message: "Workflow triggered for ticket." });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Failed to trigger workflow" });
-    }
-});
+router.get('/', verifyToken, getAllTickets);
+router.get('/:id', verifyToken, getTicketById);
+router.post('/', verifyToken, createTicket);
+router.put('/:id', verifyToken, updateTicket);
+router.delete('/:id', verifyToken, deleteTicket);
 
 module.exports = router;

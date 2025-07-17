@@ -1,61 +1,38 @@
-const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const User = require("../models/userModel");
 
-exports.registerUser = async(req, res) => {
-    try{
-        const { customerId, email, password, role } = req.body;
+exports.register = async (req, res, next) => {
+  try {
+    const { email, password, customerId, role } = req.body;
+    const hashed = await bcrypt.hash(password, 10);
 
-        if (!customerId || !email || !password){
-            return res.status(400).json({ message: "Missing fields! fill it before login"});
-        }
-        const existingUser = await User.findOne({ email });
-        if (existingUser){
-            return res.status(400).json({ message: "User already exists"});
-        }
+    const user = new User({ email, password: hashed, customerId, role });
+    await user.save();
 
-        const hashedPassword = await bcrypt.hash(password,10);
-        const user = await User.create({
-            customerId,
-            email,
-            password: hashedPassword,
-            role
-        });
-
-        res.status(201).json({ message: "User Registered Successfully"});
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({message: "Opps!! Server Error"});
-    }
+    res.status(201).json({ message: "User registered" });
+  } catch (err) {
+    next(err);
+  }
 };
 
-exports.loginUser = async (req, res) => {
-    try{
-        const { email, password} = req.body;
-        const user = await User.findOne({ email });
+exports.login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) return res.status(401).json({ error: "Invalid credentials" });
 
-        if (!user) {
-            return res.status(400).json({message: "Invalid credentails"}); 
-        }
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) return res.status(401).json({ error: "Invalid credentials" });
 
-        const isMatch = await bcrypt.compare(password, user.password);
-        if(!isMatch){
-            return res.status(400).json({ message: "Password doesn't match"});
-        }
-        const token = jwt.sign(
-            {
-                userId: user._id,
-                customerId: user.customerId,
-                role: user.role
-            },
-            process.env.JWT_SECRET,
-            { expiresIn: "1h"}
-        );
+    const token = jwt.sign({
+      userId: user._id,
+      customerId: user.customerId,
+      role: user.role
+    }, process.env.JWT_SECRET, { expiresIn: "1d" });
 
-        res.json({ token });
-
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({message: "Opps!! Server Error"});
-    }
-}
+    res.json({ token, user: { userId: user._id, customerId: user.customerId, role: user.role } });
+  } catch (err) {
+    next(err);
+  }
+};

@@ -1,21 +1,18 @@
-const express = require('express');
-const Ticket = require('../models/ticketModel'); // ya jo bhi tera model hai
+const express = require("express");
+const Ticket = require("../models/ticketModel");
 const router = express.Router();
 
-router.post('/webhook/ticket-done', async (req, res) => {
-    const sharedSecret = req.headers['shared-secret'];
-    if (sharedSecret !== process.env.WEBHOOK_SECRET) {
-        return res.status(403).json({ error: "Invalid secret" });
-    }
+router.post("/webhook/ticket-done", async (req, res, next) => {
+  const secret = req.headers["shared-secret"];
+  if (secret !== process.env.WEBHOOK_SECRET) return res.status(403).json({ error: "Invalid secret" });
 
+  try {
     const { ticketId } = req.body;
-    try {
-        await Ticket.findByIdAndUpdate(ticketId, { status: "Done" });
-        res.json({ message: "Ticket updated." });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Failed to update ticket." });
-    }
+    await Ticket.findByIdAndUpdate(ticketId, { status: "done" });
+    res.json({ message: "Ticket updated" });
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = router;
