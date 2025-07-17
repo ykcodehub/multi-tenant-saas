@@ -1,21 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const { getScreensForTenant } = require('../controllers/meController');
+const { verifyToken } = require('../middleware/authMiddleware');
 
-router.get('/', (req, res) => {
-  if (!req.user) {
-    return res.status(401).json({ message: 'Unauthorized: No user info in request' });
-  }
-
-  try {
-    res.status(200).json({
-      userId: req.user.userId,
-      role: req.user.role,
-      customerId: req.user.customerId
-    });
-  } catch (error) {
-    console.error('Error in /me route:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
+router.get('/screens', verifyToken, getScreensForTenant);
 
 module.exports = router;
