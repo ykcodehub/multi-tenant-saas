@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ message: 'Unauthorized: No user info in request' });
+  }
+
   try {
     res.status(200).json({
       userId: req.user.userId,
