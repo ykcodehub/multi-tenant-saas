@@ -1,8 +1,10 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { getScreensForTenant } = require('../controllers/meController');
-const { verifyToken } = require('../middleware/authMiddleware');
+const { verifyToken } = require("../middleware/authMiddleware");
+const meController = require("../controllers/meController");
 
-router.get('/screens', verifyToken, getScreensForTenant);
+// Corrected routes
+router.get("/", verifyToken, meController.getMe);
+router.get("/screens", verifyToken, meController.getScreens);
 
 module.exports = router;

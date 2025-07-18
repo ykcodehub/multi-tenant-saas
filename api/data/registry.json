@@ -1,13 +1,10 @@
 {
-    "YogendraCafe": [
-        { "name": "Support Tickets", "path": "/support" },
-        { "name": "Order Management", "path": "/orders" },
-        { "name": "Tracking", "path": "/tracking" }
-    ],
-    "HopeIntern": [
-        { "name": "Java Development", "path": "/support" },
-        { "name": "Software Maintenance", "path": "/support" },
-        { "name": "Full stack Developer", "path": "/orders" },
-        { "name": "Software Devloper Engineer", "path": "/tracking" }
-    ]
+  "tenants": {
+    "YogendraCafe": {
+      "screens": ["/support-tickets", "/orders", "/tracking"]
+    },
+    "HopeIntern": {
+      "screens": ["/dashboard", "/reports"]
+    }
+  }
 }

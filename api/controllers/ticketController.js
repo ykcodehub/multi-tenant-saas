@@ -29,7 +29,6 @@ exports.getTicketById = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch ticket" });
   }
 };
-
 // ✅ CREATE a new ticket
 exports.createTicket = async (req, res) => {
   try {
@@ -84,3 +83,4 @@ exports.deleteTicket = async (req, res) => {
     res.status(500).json({ message: "Failed to delete ticket" });
   }
 };
+
